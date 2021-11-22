@@ -23,12 +23,12 @@ function LanguageClient ({
   useEffect(() => {
     console.info(`Starting language server for language ${languageServerConfig.language}`)
     const languageClient = createLanguageClientManager(languageServerUrl, getSecurityToken, languageServerConfig, libraryUrls ?? [])
-    languageClient.onError((error) => {
+    const errorDisposable = languageClient.onError((error) => {
       if (onErrorRef.current != null) {
         onErrorRef.current(error)
       }
     })
-    languageClient.onDidChangeStatus(status => {
+    const statusChangeDisposable = languageClient.onDidChangeStatus(status => {
       if (onDidChangeStatusRef.current != null) {
         onDidChangeStatusRef.current(status)
       }
@@ -36,6 +36,8 @@ function LanguageClient ({
     const startTimeout = setTimeout(() => languageClient.start())
 
     return () => {
+      errorDisposable.dispose()
+      statusChangeDisposable.dispose()
       console.info('Shutting down language server')
       clearTimeout(startTimeout)
       languageClient.dispose().then(() => {
