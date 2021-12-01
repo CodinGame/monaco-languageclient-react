@@ -1,6 +1,6 @@
 {
   "name": "@codingame/monaco-languageclient-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Monaco Editor React component",
   "scripts": {
     "build": "tsc"
