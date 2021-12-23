@@ -4,6 +4,7 @@ import { LanguageClientManager } from '@codingame/monaco-languageclient-wrapper/
 
 export interface LanguageClientProps {
   id: string
+  sessionId?: string
   languageServerUrl: string
   getSecurityToken: () => Promise<string>
   libraryUrls?: string[]
@@ -15,6 +16,7 @@ const defaultLibraryUrls: string[] = []
 
 function LanguageClient ({
   id,
+  sessionId,
   languageServerUrl,
   getSecurityToken,
   libraryUrls = defaultLibraryUrls,
@@ -26,7 +28,7 @@ function LanguageClient ({
   const languageClientRef = useRef<LanguageClientManager>()
   useEffect(() => {
     console.info(`Starting language server for language ${id}`)
-    const languageClient = createLanguageClientManager(id, languageServerUrl, getSecurityToken, libraryUrls)
+    const languageClient = createLanguageClientManager(id, sessionId, languageServerUrl, getSecurityToken, libraryUrls)
     languageClientRef.current = languageClient
     const errorDisposable = languageClient.onError((error: Error) => {
       if (onErrorRef.current != null) {
@@ -51,7 +53,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [getSecurityToken, id, languageServerUrl, libraryUrls])
+  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId])
 
   useEffect(() => {
     onErrorRef.current = onError
