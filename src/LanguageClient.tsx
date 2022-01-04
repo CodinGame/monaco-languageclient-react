@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useRef } from 'react'
-import { createLanguageClientManager, StatusChangeEvent } from '@codingame/monaco-languageclient-wrapper'
+import { createLanguageClientManager, LanguageClientId, StatusChangeEvent } from '@codingame/monaco-languageclient-wrapper'
 import { LanguageClientManager } from '@codingame/monaco-languageclient-wrapper/dist/languageClient'
 
 export interface LanguageClientProps {
-  id: string
+  id: LanguageClientId
   sessionId?: string
   languageServerUrl: string
   getSecurityToken: () => Promise<string>
