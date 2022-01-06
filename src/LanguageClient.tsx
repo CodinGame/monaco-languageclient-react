@@ -1,41 +1,41 @@
 import { ReactElement, useEffect, useRef } from 'react'
-import { createLanguageClientManager, LanguageServerConfig, StatusChangeEvent } from '@codingame/monaco-languageclient-wrapper'
+import { createLanguageClientManager, LanguageClientId, StatusChangeEvent } from '@codingame/monaco-languageclient-wrapper'
 import { LanguageClientManager } from '@codingame/monaco-languageclient-wrapper/dist/languageClient'
 
 export interface LanguageClientProps {
-  languageServerConfig: LanguageServerConfig
+  id: LanguageClientId
+  sessionId?: string
   languageServerUrl: string
   getSecurityToken: () => Promise<string>
   libraryUrls?: string[]
   onError?: (error: Error) => void
-  onDidChangeStatus?: (status: StatusChangeEvent) => void,
-  configuration?: any
+  onDidChangeStatus?: (status: StatusChangeEvent) => void
 }
 
 const defaultLibraryUrls: string[] = []
 
 function LanguageClient ({
-  languageServerConfig,
+  id,
+  sessionId,
   languageServerUrl,
   getSecurityToken,
   libraryUrls = defaultLibraryUrls,
   onError,
-  onDidChangeStatus,
-  configuration
+  onDidChangeStatus
 }: LanguageClientProps): ReactElement | null {
   const onErrorRef = useRef<(error: Error) => void>()
   const onDidChangeStatusRef = useRef<(status: StatusChangeEvent) => void>()
   const languageClientRef = useRef<LanguageClientManager>()
   useEffect(() => {
-    console.info(`Starting language server for language ${languageServerConfig.language}`)
-    const languageClient = createLanguageClientManager(languageServerUrl, getSecurityToken, languageServerConfig, libraryUrls)
+    console.info(`Starting language server for language ${id}`)
+    const languageClient = createLanguageClientManager(id, sessionId, languageServerUrl, getSecurityToken, libraryUrls)
     languageClientRef.current = languageClient
-    const errorDisposable = languageClient.onError((error) => {
+    const errorDisposable = languageClient.onError((error: Error) => {
       if (onErrorRef.current != null) {
         onErrorRef.current(error)
       }
     })
-    const statusChangeDisposable = languageClient.onDidChangeStatus(status => {
+    const statusChangeDisposable = languageClient.onDidChangeStatus((status: StatusChangeEvent) => {
       if (onDidChangeStatusRef.current != null) {
         onDidChangeStatusRef.current(status)
       }
@@ -53,13 +53,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [getSecurityToken, languageServerConfig, languageServerUrl, libraryUrls])
-
-  useEffect(() => {
-    if (configuration != null) {
-      languageClientRef.current!.updateConfiguration(configuration)
-    }
-  }, [configuration])
+  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId])
 
   useEffect(() => {
     onErrorRef.current = onError
