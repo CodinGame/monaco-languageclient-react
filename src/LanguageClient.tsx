@@ -1,6 +1,6 @@
-import { ReactElement, useEffect, useRef } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { createLanguageClientManager, LanguageClientId, StatusChangeEvent } from '@codingame/monaco-languageclient-wrapper'
-import { LanguageClientManager } from '@codingame/monaco-languageclient-wrapper/dist/languageClient'
+import { LanguageClientManager, WillShutdownParams } from '@codingame/monaco-languageclient-wrapper/dist/languageClient'
 
 export interface LanguageClientProps {
   id: LanguageClientId
@@ -10,6 +10,10 @@ export interface LanguageClientProps {
   libraryUrls?: string[]
   onError?: (error: Error) => void
   onDidChangeStatus?: (status: StatusChangeEvent) => void
+  /** The language client will be shutdown by the server */
+  onWillShutdown?: (status: WillShutdownParams) => void
+  /** Allows the client to reconnect to another server when it receives the willShutdown notification */
+  restartAllowed?: boolean
 }
 
 const defaultLibraryUrls: string[] = []
@@ -21,12 +25,29 @@ function LanguageClient ({
   getSecurityToken,
   libraryUrls = defaultLibraryUrls,
   onError,
-  onDidChangeStatus
+  onDidChangeStatus,
+  onWillShutdown,
+  restartAllowed = true
 }: LanguageClientProps): ReactElement | null {
   const onErrorRef = useRef<(error: Error) => void>()
   const onDidChangeStatusRef = useRef<(status: StatusChangeEvent) => void>()
+  const onWillShutdownRef = useRef<(params: WillShutdownParams) => void>()
   const languageClientRef = useRef<LanguageClientManager>()
+
+  const [willShutdown, setWillShutdown] = useState(false)
+  const [counter, setCounter] = useState(1)
+
   useEffect(() => {
+    if (willShutdown && restartAllowed) {
+      console.info('Restarting language client because the current instance will be shutdown')
+      setCounter(v => v + 1)
+      setWillShutdown(false)
+    }
+  }, [willShutdown, restartAllowed])
+
+  useEffect(() => {
+    setWillShutdown(false)
+
     console.info(`Starting language server for language ${id}`)
     const languageClient = createLanguageClientManager(id, sessionId, languageServerUrl, getSecurityToken, libraryUrls)
     languageClientRef.current = languageClient
@@ -42,6 +63,13 @@ function LanguageClient ({
     })
     const startTimeout = setTimeout(() => languageClient.start())
 
+    languageClient.onWillShutdown((params: WillShutdownParams) => {
+      if (onWillShutdownRef.current != null) {
+        onWillShutdownRef.current(params)
+      }
+      setWillShutdown(true)
+    })
+
     return () => {
       errorDisposable.dispose()
       statusChangeDisposable.dispose()
@@ -53,7 +81,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId])
+  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId, counter])
 
   useEffect(() => {
     onErrorRef.current = onError
@@ -62,6 +90,10 @@ function LanguageClient ({
   useEffect(() => {
     onDidChangeStatusRef.current = onDidChangeStatus
   }, [onDidChangeStatus])
+
+  useEffect(() => {
+    onWillShutdownRef.current = onWillShutdown
+  }, [onWillShutdown])
 
   return null
 }
