@@ -1,11 +1,11 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { createLanguageClientManager, LanguageClientId, StatusChangeEvent } from '@codingame/monaco-languageclient-wrapper'
-import { LanguageClientManager, WillShutdownParams } from '@codingame/monaco-languageclient-wrapper/dist/languageClient'
+import { createLanguageClientManager, LanguageClientId, StatusChangeEvent, LanguageClientManager, WillShutdownParams } from '@codingame/monaco-languageclient-wrapper'
 
 export interface LanguageClientProps {
   id: LanguageClientId
   sessionId?: string
   languageServerUrl: string
+  useMutualizedProxy?: boolean
   getSecurityToken: () => Promise<string>
   libraryUrls?: string[]
   onError?: (error: Error) => void
@@ -22,6 +22,7 @@ function LanguageClient ({
   id,
   sessionId,
   languageServerUrl,
+  useMutualizedProxy,
   getSecurityToken,
   libraryUrls = defaultLibraryUrls,
   onError,
@@ -49,7 +50,7 @@ function LanguageClient ({
     setWillShutdown(false)
 
     console.info(`Starting language server for language ${id}`)
-    const languageClient = createLanguageClientManager(id, sessionId, languageServerUrl, getSecurityToken, libraryUrls)
+    const languageClient = createLanguageClientManager(id, sessionId, languageServerUrl, getSecurityToken, libraryUrls, useMutualizedProxy)
     languageClientRef.current = languageClient
     const errorDisposable = languageClient.onError((error: Error) => {
       if (onErrorRef.current != null) {
@@ -81,7 +82,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId, counter])
+  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId, counter, useMutualizedProxy])
 
   useEffect(() => {
     onErrorRef.current = onError
