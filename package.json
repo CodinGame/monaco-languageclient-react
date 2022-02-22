@@ -19,7 +19,7 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@codingame/monaco-languageclient-wrapper": "^1.6.0",
+    "@codingame/monaco-languageclient-wrapper": "^1.7.0",
     "activity-detector": "^3.0.0",
     "react": ">=16.0.0"
   },
