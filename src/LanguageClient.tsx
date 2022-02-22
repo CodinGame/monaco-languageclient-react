@@ -1,8 +1,12 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { createLanguageClientManager, LanguageClientId, StatusChangeEvent, LanguageClientManager, WillShutdownParams } from '@codingame/monaco-languageclient-wrapper'
+import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams } from '@codingame/monaco-languageclient-wrapper'
 import useIsUserActive from './hooks/useIsUserActive'
 import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient'
 import { useLastVersion } from './hooks/useLastVersion'
+
+export interface StatusChangeEvent {
+  status: WrapperStatusChangeEvent['status'] | 'inactivityShutdown'
+}
 
 export interface LanguageClientProps {
   id: LanguageClientId
@@ -64,6 +68,9 @@ function LanguageClient ({
     setWillShutdown(false)
 
     if (shouldShutdownLanguageClient) {
+      onDidChangeStatus({
+        status: 'inactivityShutdown'
+      })
       return
     }
 
