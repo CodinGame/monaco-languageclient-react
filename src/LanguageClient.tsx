@@ -30,7 +30,7 @@ function LanguageClient ({
   sessionId,
   languageServerUrl,
   useMutualizedProxy,
-  getSecurityToken,
+  getSecurityToken: _getSecurityToken,
   libraryUrls = defaultLibraryUrls,
   onError: _onError,
   onDidChangeStatus: _onDidChangeStatus,
@@ -38,6 +38,7 @@ function LanguageClient ({
   userInactivityDelay = 30 * 1000,
   userInactivityShutdownDelay = 60 * 1000
 }: LanguageClientProps): ReactElement | null {
+  const getSecurityToken = useLastVersion(_getSecurityToken)
   const onError = useLastVersion(_onError ?? noop)
   const onDidChangeStatus = useLastVersion(_onDidChangeStatus ?? noop)
   const onWillShutdown = useLastVersion(_onWillShutdown ?? noop)
