@@ -53,7 +53,7 @@ function LanguageClient ({
   const [counter, setCounter] = useState(1)
 
   const isUserInactive = useIsUserActive(userInactivityDelay)
-  const shouldShutdownLanguageClient = useShouldShutdownLanguageClient(isUserInactive, userInactivityShutdownDelay)
+  const shouldShutdownLanguageClientForInactivity = useShouldShutdownLanguageClient(isUserInactive, userInactivityShutdownDelay)
   const restartAllowed = !isUserInactive
 
   useEffect(() => {
@@ -67,7 +67,7 @@ function LanguageClient ({
   useEffect(() => {
     setWillShutdown(false)
 
-    if (shouldShutdownLanguageClient) {
+    if (shouldShutdownLanguageClientForInactivity) {
       onDidChangeStatus({
         status: 'inactivityShutdown'
       })
@@ -97,7 +97,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId, counter, useMutualizedProxy, shouldShutdownLanguageClient, onError, onDidChangeStatus, onWillShutdown])
+  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId, counter, useMutualizedProxy, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown])
 
   return null
 }
