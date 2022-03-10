@@ -1,13 +1,16 @@
-import { LanguageClientId, loadExtensionConfigurations, registerLanguageClient } from '@codingame/monaco-languageclient-wrapper'
+import { CodinGameInfrastructure, Infrastructure, LanguageClientId, loadExtensionConfigurations, registerLanguageClient, WorkspaceFolder } from '@codingame/monaco-languageclient-wrapper'
 import LanguageClient, { LanguageClientProps, StatusChangeEvent } from './LanguageClient'
 
 export default LanguageClient
 export {
   loadExtensionConfigurations,
-  registerLanguageClient
+  registerLanguageClient,
+  CodinGameInfrastructure
 }
 export type {
   LanguageClientProps,
   LanguageClientId,
-  StatusChangeEvent
+  StatusChangeEvent,
+  Infrastructure,
+  WorkspaceFolder
 }
