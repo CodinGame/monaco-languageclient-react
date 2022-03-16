@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams } from '@codingame/monaco-languageclient-wrapper'
+import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams, Infrastructure } from '@codingame/monaco-languageclient-wrapper'
 import useIsUserActive from './hooks/useIsUserActive'
 import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient'
 import { useLastVersion } from './hooks/useLastVersion'
@@ -10,11 +10,7 @@ export interface StatusChangeEvent {
 
 export interface LanguageClientProps {
   id: LanguageClientId
-  sessionId?: string
-  languageServerUrl: string
-  useMutualizedProxy?: boolean
-  getSecurityToken: () => Promise<string>
-  libraryUrls?: string[]
+  infrastructure: Infrastructure
   onError?: (error: Error) => void
   onDidChangeStatus?: (status: StatusChangeEvent) => void
   /** The language client will be shutdown by the server */
@@ -25,24 +21,17 @@ export interface LanguageClientProps {
   userInactivityShutdownDelay?: number
 }
 
-const defaultLibraryUrls: string[] = []
-
 const noop = () => null
 
 function LanguageClient ({
   id,
-  sessionId,
-  languageServerUrl,
-  useMutualizedProxy,
-  getSecurityToken: _getSecurityToken,
-  libraryUrls = defaultLibraryUrls,
+  infrastructure,
   onError: _onError,
   onDidChangeStatus: _onDidChangeStatus,
   onWillShutdown: _onWillShutdown,
   userInactivityDelay = 30 * 1000,
   userInactivityShutdownDelay = 60 * 1000
 }: LanguageClientProps): ReactElement | null {
-  const getSecurityToken = useLastVersion(_getSecurityToken)
   const onError = useLastVersion(_onError ?? noop)
   const onDidChangeStatus = useLastVersion(_onDidChangeStatus ?? noop)
   const onWillShutdown = useLastVersion(_onWillShutdown ?? noop)
@@ -75,7 +64,7 @@ function LanguageClient ({
     }
 
     console.info(`Starting language server for language ${id}`)
-    const languageClient = createLanguageClientManager(id, sessionId, languageServerUrl, getSecurityToken, libraryUrls, useMutualizedProxy)
+    const languageClient = createLanguageClientManager(id, infrastructure)
     languageClientRef.current = languageClient
     const errorDisposable = languageClient.onError(onError)
     const statusChangeDisposable = languageClient.onDidChangeStatus(onDidChangeStatus)
@@ -97,7 +86,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [getSecurityToken, id, languageServerUrl, libraryUrls, sessionId, counter, useMutualizedProxy, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown])
+  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure])
 
   return null
 }
