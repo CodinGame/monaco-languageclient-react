@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams, Infrastructure } from '@codingame/monaco-languageclient-wrapper'
+import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams, Infrastructure, LanguageClientOptions } from '@codingame/monaco-languageclient-wrapper'
 import useIsUserActive from './hooks/useIsUserActive'
 import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient'
 import { useLastVersion } from './hooks/useLastVersion'
@@ -11,6 +11,7 @@ export interface StatusChangeEvent {
 export interface LanguageClientProps {
   id: LanguageClientId
   infrastructure: Infrastructure
+  clientOptions?: LanguageClientOptions
   onError?: (error: Error) => void
   onDidChangeStatus?: (status: StatusChangeEvent) => void
   /** The language client will be shutdown by the server */
@@ -26,6 +27,7 @@ const noop = () => null
 function LanguageClient ({
   id,
   infrastructure,
+  clientOptions,
   onError: _onError,
   onDidChangeStatus: _onDidChangeStatus,
   onWillShutdown: _onWillShutdown,
@@ -64,7 +66,7 @@ function LanguageClient ({
     }
 
     console.info(`Starting language server for language ${id}`)
-    const languageClient = createLanguageClientManager(id, infrastructure)
+    const languageClient = createLanguageClientManager(id, infrastructure, clientOptions)
     languageClientRef.current = languageClient
     const errorDisposable = languageClient.onError(onError)
     const statusChangeDisposable = languageClient.onDidChangeStatus(onDidChangeStatus)
@@ -86,7 +88,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure])
+  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions])
 
   return null
 }
