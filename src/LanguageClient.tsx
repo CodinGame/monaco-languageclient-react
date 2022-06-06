@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams, Infrastructure, LanguageClientOptions } from '@codingame/monaco-languageclient-wrapper'
+import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams, Infrastructure, LanguageClientOptions, LanguageClientManagerOptions } from '@codingame/monaco-languageclient-wrapper'
 import useIsUserActive from './hooks/useIsUserActive'
 import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient'
 import { useLastVersion } from './hooks/useLastVersion'
@@ -12,6 +12,7 @@ export interface LanguageClientProps {
   id: LanguageClientId
   infrastructure: Infrastructure
   clientOptions?: LanguageClientOptions
+  clientManagerOptions?: LanguageClientManagerOptions
   onError?: (error: Error) => void
   onDidChangeStatus?: (status: StatusChangeEvent) => void
   /** The language client will be shutdown by the server */
@@ -28,6 +29,7 @@ function LanguageClient ({
   id,
   infrastructure,
   clientOptions,
+  clientManagerOptions,
   onError: _onError,
   onDidChangeStatus: _onDidChangeStatus,
   onWillShutdown: _onWillShutdown,
@@ -66,7 +68,7 @@ function LanguageClient ({
     }
 
     console.info(`Starting language server for language ${id}`)
-    const languageClient = createLanguageClientManager(id, infrastructure, clientOptions)
+    const languageClient = createLanguageClientManager(id, infrastructure, clientOptions, clientManagerOptions)
     languageClientRef.current = languageClient
     const errorDisposable = languageClient.onError(onError)
     const statusChangeDisposable = languageClient.onDidChangeStatus(onDidChangeStatus)
@@ -88,7 +90,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions])
+  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions, clientManagerOptions])
 
   return null
 }
