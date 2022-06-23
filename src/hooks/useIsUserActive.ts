@@ -5,7 +5,7 @@ export default function useIsUserActive (timeToIdle: number): boolean {
   const [active, setActive] = useState(true)
   useEffect(() => {
     const activityDetector = createActivityDetector({
-      timeToIdle: timeToIdle
+      timeToIdle
     })
     activityDetector.on('idle', () => {
       setActive(false)
