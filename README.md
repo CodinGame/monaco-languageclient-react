@@ -10,19 +10,29 @@ npm install @codingame/monaco-languageclient-react
 
 #### Simple usage
 
-You just need to import and render the `LanguageClient` component:
+You need to create an `infrastructure` object and render the `LanguageClient` component:
 
 ```typescript
 import React from "react";
 
-import LanguageClient from "@codingame/monaco-languageclient-react";
+import LanguageClient, { Infrastructure } from "@codingame/monaco-languageclient-react";
+
+class MyInfrastructure implements Infrastructure {
+  automaticTextDocumentUpdate = false
+  rootUri = 'file://...'
+  useMutualizedProxy() { return false }
+  getFileContent(resource, languageClient) { return ... }
+  openConnection(id) {
+    // create connection
+  }
+}
+const infrastructure = new MyInfrastructure()
 
 function LanguageClientContainer() {
   return (
    <LanguageClient
-     languageServerConfig={...}
-     getSecurityToken={...}
-     languageServerUrl={...}
+     id='java'
+     infrastructure={infrastructure}
    />
   );
 }
