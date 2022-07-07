@@ -12,7 +12,7 @@ npm install @codingame/monaco-languageclient-react
 
 You need to create an `infrastructure` object and render the `LanguageClient` component:
 
-```typescript
+```tsx
 import React from "react";
 
 import LanguageClient, { Infrastructure } from "@codingame/monaco-languageclient-react";
