@@ -45,9 +45,9 @@ function LanguageClient ({
   const [willShutdown, setWillShutdown] = useState(false)
   const [counter, setCounter] = useState(1)
 
-  const isUserInactive = useIsUserActive(userInactivityDelay)
-  const shouldShutdownLanguageClientForInactivity = useShouldShutdownLanguageClient(isUserInactive, userInactivityShutdownDelay)
-  const restartAllowed = !isUserInactive
+  const isUserActive = useIsUserActive(userInactivityDelay)
+  const shouldShutdownLanguageClientForInactivity = useShouldShutdownLanguageClient(isUserActive, userInactivityShutdownDelay)
+  const restartAllowed = !isUserActive
 
   useEffect(() => {
     if (willShutdown && restartAllowed) {
