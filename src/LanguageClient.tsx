@@ -51,6 +51,7 @@ function LanguageClient ({
 
   useEffect(() => {
     if (willShutdown && restartAllowed) {
+      // eslint-disable-next-line no-console
       console.info('Restarting language client because the current instance will be shutdown')
       setCounter(v => v + 1)
       setWillShutdown(false)
@@ -67,6 +68,7 @@ function LanguageClient ({
       return
     }
 
+    // eslint-disable-next-line no-console
     console.info(`Starting language server for language ${id}`)
     const languageClient = createLanguageClientManager(id, infrastructure, clientOptions, clientManagerOptions)
     languageClientRef.current = languageClient
@@ -82,9 +84,11 @@ function LanguageClient ({
     return () => {
       errorDisposable.dispose()
       statusChangeDisposable.dispose()
+      // eslint-disable-next-line no-console
       console.info('Shutting down language server')
       clearTimeout(startTimeout)
       languageClient.dispose().then(() => {
+        // eslint-disable-next-line no-console
         console.info('Language server shut down')
       }, err => {
         console.error('Unable to dispose language client', err)
