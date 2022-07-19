@@ -1,5 +1,7 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams, Infrastructure, LanguageClientOptions, LanguageClientManagerOptions } from '@codingame/monaco-languageclient-wrapper'
+import { useLocalStorage, writeStorage } from '@rehooks/local-storage'
+import { v4 as uuidv4 } from 'uuid'
 import useIsUserActive from './hooks/useIsUserActive'
 import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient'
 import { useLastVersion } from './hooks/useLastVersion'
@@ -21,9 +23,21 @@ export interface LanguageClientProps {
   userInactivityDelay?: number
   /** Shutdown the language client when the user stay inactive during this duration (default 60 seconds) */
   userInactivityShutdownDelay?: number
+  /** Allow only a single tab to have active language clients (the most recently focused one) */
+  singleActiveTab?: boolean
 }
 
 const noop = () => null
+
+const ACTIVE_TAB_LOCAL_STORAGE_KEY = 'monaco-lsp-active-tab'
+const currentTab = uuidv4()
+let languageClientCount = 0
+
+window.addEventListener('focus', () => {
+  if (languageClientCount > 0) {
+    writeStorage(ACTIVE_TAB_LOCAL_STORAGE_KEY, currentTab)
+  }
+})
 
 function LanguageClient ({
   id,
@@ -34,7 +48,8 @@ function LanguageClient ({
   onDidChangeStatus: _onDidChangeStatus,
   onWillShutdown: _onWillShutdown,
   userInactivityDelay = 30 * 1000,
-  userInactivityShutdownDelay = 60 * 1000
+  userInactivityShutdownDelay = 60 * 1000,
+  singleActiveTab = true
 }: LanguageClientProps): ReactElement | null {
   const onError = useLastVersion(_onError ?? noop)
   const onDidChangeStatus = useLastVersion(_onDidChangeStatus ?? noop)
@@ -49,6 +64,9 @@ function LanguageClient ({
   const shouldShutdownLanguageClientForInactivity = useShouldShutdownLanguageClient(isUserActive, userInactivityShutdownDelay)
   const restartAllowed = !isUserActive
 
+  const [activeTab] = useLocalStorage(ACTIVE_TAB_LOCAL_STORAGE_KEY)
+  const shouldShutdownLanguageClientAsNotActiveTab = singleActiveTab && activeTab !== currentTab
+
   useEffect(() => {
     if (willShutdown && restartAllowed) {
       // eslint-disable-next-line no-console
@@ -59,9 +77,14 @@ function LanguageClient ({
   }, [willShutdown, restartAllowed])
 
   useEffect(() => {
+    languageClientCount++
+    if (window.document.hasFocus()) {
+      writeStorage(ACTIVE_TAB_LOCAL_STORAGE_KEY, currentTab)
+    }
+
     setWillShutdown(false)
 
-    if (shouldShutdownLanguageClientForInactivity) {
+    if (shouldShutdownLanguageClientForInactivity || shouldShutdownLanguageClientAsNotActiveTab) {
       onDidChangeStatus({
         status: 'inactivityShutdown'
       })
@@ -82,6 +105,7 @@ function LanguageClient ({
     })
 
     return () => {
+      languageClientCount--
       errorDisposable.dispose()
       statusChangeDisposable.dispose()
       // eslint-disable-next-line no-console
@@ -94,7 +118,7 @@ function LanguageClient ({
         console.error('Unable to dispose language client', err)
       })
     }
-  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions, clientManagerOptions])
+  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions, clientManagerOptions, shouldShutdownLanguageClientAsNotActiveTab])
 
   return null
 }
