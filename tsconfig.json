@@ -4,7 +4,7 @@
     "outDir": "dist/",
     "declaration": true,
     "skipLibCheck": true,
-    "baseUrl": "./app",
+    "baseUrl": "./src",
     "jsx": "react",
     "lib": [
       "dom",
@@ -17,7 +17,6 @@
         "*"
       ]
     },
-    "resolveJsonModule": true,
     "sourceMap": true,
     "target": "ES2022"
   },
