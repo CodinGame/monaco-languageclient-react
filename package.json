@@ -20,8 +20,10 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@codingame/monaco-languageclient-wrapper": "^3.2.5",
+    "@rehooks/local-storage": "^2.4.4",
     "activity-detector": "^3.0.0",
-    "react": ">=16.0.0"
+    "react": ">=16.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "7.18.9",
@@ -36,6 +38,7 @@
     "@codingame/tsconfig": "^1.1.0",
     "@types/deep-equal": "^1.0.1",
     "@types/react": "17.0.40",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@typescript-eslint/parser": "5.30.7",
     "babel-eslint": "10.1.0",
