@@ -78,10 +78,16 @@ function LanguageClient ({
 
   useEffect(() => {
     languageClientCount++
+    // As soon as a new language client is requested and we have a focus, let's become the active tab
     if (window.document.hasFocus()) {
       writeStorage(ACTIVE_TAB_LOCAL_STORAGE_KEY, currentTab)
     }
+    return () => {
+      languageClientCount--
+    }
+  }, [])
 
+  useEffect(() => {
     setWillShutdown(false)
 
     if (shouldShutdownLanguageClientForInactivity || shouldShutdownLanguageClientAsNotActiveTab) {
@@ -105,7 +111,6 @@ function LanguageClient ({
     })
 
     return () => {
-      languageClientCount--
       errorDisposable.dispose()
       statusChangeDisposable.dispose()
       // eslint-disable-next-line no-console
