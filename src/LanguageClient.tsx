@@ -116,11 +116,15 @@ function LanguageClient ({
       // eslint-disable-next-line no-console
       console.info('Shutting down language server')
       clearTimeout(startTimeout)
-      languageClient.dispose().then(() => {
-        // eslint-disable-next-line no-console
-        console.info('Language server shut down')
-      }, err => {
-        console.error('Unable to dispose language client', err)
+      setTimeout(() => {
+        // Close in a timeout so the languageclient is not disposed at the exact same time as a model
+        // Or a error is displayed because it fails to send the didClose notification
+        languageClient.dispose().then(() => {
+          // eslint-disable-next-line no-console
+          console.info('Language server shut down')
+        }, err => {
+          console.error('Unable to dispose language client', err)
+        })
       })
     }
   }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions, clientManagerOptions, shouldShutdownLanguageClientAsNotActiveTab])
