@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as WrapperStatusChangeEvent, LanguageClientManager, WillShutdownParams, Infrastructure, LanguageClientOptions, LanguageClientManagerOptions } from '@codingame/monaco-languageclient-wrapper'
 import { useLocalStorage, writeStorage } from '@rehooks/local-storage'
 import { v4 as uuidv4 } from 'uuid'
+import { initializePromise } from '@codingame/monaco-editor-wrapper'
 import useIsUserActive from './hooks/useIsUserActive'
 import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient'
 import { useLastVersion } from './hooks/useLastVersion'
@@ -59,6 +60,13 @@ function LanguageClient ({
 
   const [willShutdown, setWillShutdown] = useState(false)
   const [counter, setCounter] = useState(1)
+  const [servicesReady, setServicesReady] = useState(false)
+  useEffect(() => {
+    void (async () => {
+      await initializePromise
+      setServicesReady(true)
+    })()
+  }, [])
 
   const isUserActive = useIsUserActive(userInactivityDelay)
   const shouldShutdownLanguageClientForInactivity = useShouldShutdownLanguageClient(isUserActive, userInactivityShutdownDelay)
@@ -88,6 +96,9 @@ function LanguageClient ({
   }, [])
 
   useEffect(() => {
+    if (!servicesReady) {
+      return
+    }
     setWillShutdown(false)
 
     if (shouldShutdownLanguageClientForInactivity || shouldShutdownLanguageClientAsNotActiveTab) {
@@ -127,7 +138,7 @@ function LanguageClient ({
         })
       })
     }
-  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions, clientManagerOptions, shouldShutdownLanguageClientAsNotActiveTab])
+  }, [id, counter, shouldShutdownLanguageClientForInactivity, onError, onDidChangeStatus, onWillShutdown, infrastructure, clientOptions, clientManagerOptions, shouldShutdownLanguageClientAsNotActiveTab, servicesReady])
 
   return null
 }
