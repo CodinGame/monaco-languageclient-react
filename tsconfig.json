@@ -1,28 +1,4 @@
 {
-  "extends": "@codingame/tsconfig",
-  "compilerOptions": {
-    "outDir": "dist/",
-    "declaration": true,
-    "skipLibCheck": true,
-    "baseUrl": "./src",
-    "jsx": "react",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "module": "esnext",
-    "paths": {
-      "app/*": [
-        "*"
-      ]
-    },
-    "sourceMap": true,
-    "target": "ES2022"
-  },
-  "include": ["src", ".eslintrc.cjs"],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "extends": "./tsconfig.build.json",
+  "include": ["src", ".eslintrc.cjs"]
 }
