@@ -3,9 +3,9 @@ import { createLanguageClientManager, LanguageClientId, StatusChangeEvent as Wra
 import { useLocalStorage, writeStorage } from '@rehooks/local-storage'
 import { v4 as uuidv4 } from 'uuid'
 import { initializePromise } from '@codingame/monaco-editor-wrapper'
-import useIsUserActive from './hooks/useIsUserActive'
-import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient'
-import { useLastVersion } from './hooks/useLastVersion'
+import useIsUserActive from './hooks/useIsUserActive.js'
+import useShouldShutdownLanguageClient from './hooks/useShouldShutdownLanguageClient.js'
+import { useLastVersion } from './hooks/useLastVersion.js'
 
 export interface StatusChangeEvent {
   status: WrapperStatusChangeEvent['status'] | 'inactivityShutdown'

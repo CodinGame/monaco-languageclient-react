@@ -25,7 +25,6 @@
   "dependencies": {
     "@codingame/monaco-languageclient-wrapper": "^5.0.4",
     "@rehooks/local-storage": "^2.4.5",
-    "activity-detector": "^3.0.0",
     "react": ">=18.2.0",
     "uuid": "^9.0.1"
   },
