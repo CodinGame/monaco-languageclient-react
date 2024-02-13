@@ -1,0 +1,29 @@
+{
+  "extends": "@codingame/tsconfig",
+  "compilerOptions": {
+    "outDir": "dist/",
+    "rootDir": "src/",
+    "declaration": true,
+    "skipLibCheck": true,
+    "baseUrl": "./src",
+    "jsx": "react",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "module": "esnext",
+    "paths": {
+      "app/*": [
+        "*"
+      ]
+    },
+    "sourceMap": true,
+    "target": "ES2022"
+  },
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}
