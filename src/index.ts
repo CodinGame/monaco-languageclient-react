@@ -1,5 +1,5 @@
 import { CodinGameInfrastructure, Infrastructure, LanguageClientId, loadExtensionConfigurations, registerLanguageClient, WorkspaceFolder } from '@codingame/monaco-languageclient-wrapper'
-import LanguageClient, { LanguageClientProps, StatusChangeEvent } from './LanguageClient'
+import LanguageClient, { LanguageClientProps, StatusChangeEvent } from './LanguageClient.js'
 
 export default LanguageClient
 export {
