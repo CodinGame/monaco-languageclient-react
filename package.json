@@ -9,7 +9,7 @@
   "scripts": {
     "build": "npm run lint && npm run compile",
     "compile": "tsc -p ./tsconfig.build.json",
-    "lint": "eslint --ext .ts --ext .tsx src"
+    "lint": "eslint 'src/**/*.ts' && prettier --check '**/*.{js,ts}'"
   },
   "repository": {
     "type": "git",
@@ -23,38 +23,26 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@codingame/monaco-languageclient-wrapper": "^9.0.0",
+    "@codingame/monaco-languageclient-wrapper": "^10.0.0",
     "@rehooks/local-storage": "^2.4.5",
     "react": ">=18.3.1",
-    "uuid": "^10.0.0"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@codingame/commitlint-config-codingame": "^1.1.1",
-    "@codingame/eslint-config": "^1.1.10",
-    "@codingame/eslint-config-react": "^1.0.2",
-    "@codingame/semantic-release-config-github": "^1.0.0",
+    "@codingame/semantic-release-config-github": "^2.0.0",
     "@codingame/tsconfig": "^1.1.1",
-    "@commitlint/cli": "^19.4.0",
+    "@commitlint/cli": "^19.7.1",
     "@types/deep-equal": "^1.0.4",
-    "@types/react": "18.3.4",
+    "@types/react": "19.0.8",
     "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "7.16.0",
-    "@typescript-eslint/parser": "7.16.0",
-    "babel-eslint": "10.1.0",
-    "conventional-changelog-conventionalcommits": "^7.0.2",
-    "eslint": "8.57.0",
-    "eslint-config-standard": "17.1.0",
-    "eslint-config-standard-jsx": "11.0.0",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "6.2.0",
-    "eslint-plugin-react": "7.34.3",
-    "eslint-plugin-react-hooks": "4.6.2",
-    "eslint-plugin-unused-imports": "3.2.0",
-    "typescript": "5.5.4"
-  },
-  "overrides": {
-    "@typescript-eslint/eslint-plugin": "$@typescript-eslint/eslint-plugin"
+    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "eslint": "9.19.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "typescript": "5.7.3",
+    "typescript-eslint": "^8.23.0",
+    "prettier": "^3.4.2"
   },
   "volta": {
     "node": "20.10.0",
