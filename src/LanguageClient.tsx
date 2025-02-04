@@ -56,7 +56,7 @@ function LanguageClient ({
   const onDidChangeStatus = useLastVersion(_onDidChangeStatus ?? noop)
   const onWillShutdown = useLastVersion(_onWillShutdown ?? noop)
 
-  const languageClientRef = useRef<LanguageClientManager>()
+  const languageClientRef = useRef<LanguageClientManager>(undefined)
 
   const [willShutdown, setWillShutdown] = useState(false)
   const [counter, setCounter] = useState(1)
