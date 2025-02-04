@@ -31,7 +31,9 @@ if (typeof document.hidden !== 'undefined') {
   const prefixes = ['webkit', 'moz', 'ms']
   for (let i = 0; i < prefixes.length; i++) {
     const prefix = prefixes[i]
-    if (typeof (document as unknown as Record<string, unknown>)[`${prefix}Hidden`] !== 'undefined') {
+    if (
+      typeof (document as unknown as Record<string, unknown>)[`${prefix}Hidden`] !== 'undefined'
+    ) {
       hidden = `${prefix}Hidden` as 'hidden'
       visibilityChangeEvent = `${prefix}visibilitychange` as 'visibilitychange'
       break
@@ -62,7 +64,7 @@ interface ActivityDetectorParams {
   initialState?: State
   autoInit?: boolean
 }
-function createActivityDetector ({
+function createActivityDetector({
   activityEvents = DEFAULT_ACTIVITY_EVENTS,
   inactivityEvents = DEFAULT_INACTIVITY_EVENTS,
   ignoredEventsWhenIdle = DEFAULT_IGNORED_EVENTS_WHEN_IDLE,
@@ -81,7 +83,7 @@ function createActivityDetector ({
     }
     if (state !== newState) {
       state = newState
-      listeners[state].forEach(l => l())
+      listeners[state].forEach((l) => l())
     }
   }
 
@@ -104,12 +106,13 @@ function createActivityDetector ({
    */
   const init = (firstState = DEFAULT_INITIAL_STATE) => {
     setState(firstState === State.active ? State.active : State.idle)
-    activityEvents.forEach(eventName =>
-      window.addEventListener(eventName, handleUserActivityEvent))
+    activityEvents.forEach((eventName) =>
+      window.addEventListener(eventName, handleUserActivityEvent)
+    )
 
-    inactivityEvents.filter(eventName => eventName !== 'visibilitychange')
-      .forEach(eventName =>
-        window.addEventListener(eventName, handleUserInactivityEvent))
+    inactivityEvents
+      .filter((eventName) => eventName !== 'visibilitychange')
+      .forEach((eventName) => window.addEventListener(eventName, handleUserInactivityEvent))
 
     if (inactivityEvents.indexOf('visibilitychange') >= 0 && visibilityChangeEvent != null) {
       document.addEventListener(visibilityChangeEvent, handleVisibilityChangeEvent)
@@ -117,8 +120,8 @@ function createActivityDetector ({
   }
 
   /**
-     * Register an event listener for the required event
-     */
+   * Register an event listener for the required event
+   */
   const on = (eventName: State, listener: () => void) => {
     listeners[eventName].push(listener)
     const off = () => {
@@ -131,19 +134,21 @@ function createActivityDetector ({
   }
 
   /**
-     * Stops the activity detector and clean the listeners
-     */
+   * Stops the activity detector and clean the listeners
+   */
   const stop = () => {
     listeners[State.active] = []
     listeners[State.idle] = []
 
     clearTimeout(timer)
 
-    activityEvents.forEach(eventName =>
-      window.removeEventListener(eventName, handleUserActivityEvent))
+    activityEvents.forEach((eventName) =>
+      window.removeEventListener(eventName, handleUserActivityEvent)
+    )
 
-    inactivityEvents.forEach(eventName =>
-      window.removeEventListener(eventName, handleUserInactivityEvent))
+    inactivityEvents.forEach((eventName) =>
+      window.removeEventListener(eventName, handleUserInactivityEvent)
+    )
 
     if (visibilityChangeEvent != null) {
       document.removeEventListener(visibilityChangeEvent, handleVisibilityChangeEvent)
@@ -157,7 +162,7 @@ function createActivityDetector ({
   return { on, stop, init }
 }
 
-export default function useIsUserActive (timeToIdle: number): boolean {
+export default function useIsUserActive(timeToIdle: number): boolean {
   const [active, setActive] = useState(true)
   useEffect(() => {
     const activityDetector = createActivityDetector({

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 
-export default function useShouldShutdownLanguageClient (userActive: boolean, delay: number): boolean {
+export default function useShouldShutdownLanguageClient(
+  userActive: boolean,
+  delay: number
+): boolean {
   const [paused, setPaused] = useState(false)
   useEffect(() => {
     setPaused(false)

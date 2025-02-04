@@ -1,6 +1,6 @@
 declare module 'activity-detector' {
   class ActivityDetector {
-    public on (event: 'idle' | 'active', cb: () => void)
+    public on(event: 'idle' | 'active', cb: () => void)
     public init(): void
     public stop(): void
   }
