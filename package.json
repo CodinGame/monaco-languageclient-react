@@ -23,7 +23,7 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@codingame/monaco-languageclient-wrapper": "^18.0.0",
+    "@codingame/monaco-languageclient-wrapper": "^19.0.0",
     "@rehooks/local-storage": "^2.4.5",
     "react": ">=18.3.1",
     "uuid": "^13.0.0"
@@ -34,14 +34,14 @@
     "@codingame/tsconfig": "^1.1.1",
     "@commitlint/cli": "^19.8.1",
     "@types/deep-equal": "^1.0.4",
-    "@types/react": "19.1.13",
-    "@types/uuid": "^10.0.0",
+    "@types/react": "19.2.2",
+    "@types/uuid": "^11.0.0",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "eslint": "9.35.0",
+    "eslint": "9.37.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "typescript": "5.9.2",
-    "typescript-eslint": "^8.43.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.46.0",
     "prettier": "^3.6.2"
   },
   "volta": {
