@@ -6,6 +6,7 @@ export default function useShouldShutdownLanguageClient(
 ): boolean {
   const [paused, setPaused] = useState(false)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPaused(false)
     if (!userActive) {
       const timeout = setTimeout(() => {
