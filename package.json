@@ -23,7 +23,7 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@codingame/monaco-languageclient-wrapper": "^24.0.0",
+    "@codingame/monaco-languageclient-wrapper": "^25.0.0",
     "@rehooks/local-storage": "^2.4.5",
     "react": ">=16.0.0",
     "uuid": "^13.0.0"
@@ -41,7 +41,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.56.1",
+    "typescript-eslint": "^8.57.0",
     "prettier": "^3.8.1"
   },
   "volta": {
