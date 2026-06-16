@@ -4,8 +4,8 @@
     "outDir": "dist/",
     "rootDir": "src/",
     "declaration": true,
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
-    "baseUrl": "./src",
     "jsx": "react",
     "lib": [
       "dom",
@@ -13,11 +13,6 @@
       "esnext"
     ],
     "module": "esnext",
-    "paths": {
-      "app/*": [
-        "*"
-      ]
-    },
     "sourceMap": true,
     "target": "ES2022"
   },
