@@ -1,6 +1,5 @@
 {
   "reject": [
-    "react",
-    "eslint"
+    "react"
   ]
 }

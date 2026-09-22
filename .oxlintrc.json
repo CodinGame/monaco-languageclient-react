@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "unicorn", "typescript", "oxc"],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "ignoreRestSiblings": true }]
+  }
+}
