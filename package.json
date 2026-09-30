@@ -23,7 +23,7 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@codingame/monaco-languageclient-wrapper": "^31.0.1",
+    "@codingame/monaco-languageclient-wrapper": "^32.0.0",
     "@rehooks/local-storage": "^2.4.5",
     "react": ">=16.0.0",
     "uuid": "^14.0.2"
