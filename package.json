@@ -23,23 +23,23 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@codingame/monaco-languageclient-wrapper": "^33.0.0",
+    "@codingame/monaco-languageclient-wrapper": "^34.0.0",
     "@rehooks/local-storage": "^2.4.5",
     "react": ">=16.0.0",
-    "uuid": "^14.0.2"
+    "uuid": "^14.0.3"
   },
   "devDependencies": {
     "@codingame/commitlint-config-codingame": "^1.2.1",
-    "@codingame/semantic-release-config-github": "^2.2.2",
+    "@codingame/semantic-release-config-github": "^2.2.3",
     "@codingame/tsconfig": "^1.2.3",
-    "@commitlint/cli": "^21.2.3",
+    "@commitlint/cli": "^21.2.4",
     "@types/deep-equal": "^1.0.4",
     "@types/react": "19.3.0",
     "@types/uuid": "^11.0.0",
     "conventional-changelog-conventionalcommits": "9.3.1",
-    "oxlint": "^1.85.0",
+    "oxlint": "^1.92.0",
     "typescript": "7.0.2",
-    "prettier": "^3.9.8"
+    "prettier": "^3.9.10"
   },
   "volta": {
     "node": "25.2.0",
